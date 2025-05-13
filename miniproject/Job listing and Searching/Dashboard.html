@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Labor Connect Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+        }
+
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .logo img {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .logo h2 {
+            font-size: 1.5rem;
+            font-weight: 500;
+        }
+
+        .sidebar nav ul {
+            list-style-type: none;
+        }
+
+        .sidebar nav ul li {
+            margin-bottom: 10px;
+        }
+
+        .sidebar nav ul li a {
+            display: flex;
+            align-items: center;
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar nav ul li a:hover,
+        .sidebar nav ul li a.active {
+            background-color: #34495e;
+        }
+
+        .sidebar nav ul li a i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+            background-color: #ecf0f1;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .username {
+            font-weight: 500;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+        }
+
+        .header-actions button {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            margin-left: 15px;
+            font-size: 1rem;
+        }
+
+        #notificationBtn {
+            color: #3498db;
+        }
+
+        #switchDashboard {
+            background-color: #3498db;
+            color: #fff;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        #switchDashboard:hover {
+            background-color: #2980b9;
+        }
+
+        .content {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .section h2 {
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        .card {
+            background-color: #fff;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .card h3 {
+            margin-bottom: 10px;
+            color: #3498db;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: #3498db;
+            color: #fff;
+            padding: 8px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #2980b9;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        form label {
+            margin-bottom: 5px;
+        }
+
+        form input, form textarea, form select {
+            margin-bottom: 10px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        .notification {
+            background-color: #f39c12;
+            color: #fff;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table th, table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                padding: 10px;
+            }
+
+            .main-content {
+                padding: 10px;
+            }
+
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .header-actions {
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="https://via.placeholder.com/50" alt="Labor Connect Logo">
+                <h2>Labor Connect</h2>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#" class="active" data-section="profile"><i class="fas fa-user"></i> Profile</a></li>
+                    <li><a href="#" data-section="jobs"><i class="fas fa-briefcase"></i> <span class="laborer-menu">Job Search</span><span class="contractor-menu">Job Posting</span></a></li>
+                    <li><a href="#" data-section="skills"><i class="fas fa-graduation-cap"></i> <span class="laborer-menu">Training</span><span class="contractor-menu">Laborer Search</span></a></li>
+                    <li><a href="#" data-section="applications"><i class="fas fa-file-alt"></i> <span class="laborer-menu">Applications</span><span class="contractor-menu">Application Management</span></a></li>
+                    <li><a href="#" data-section="saved"><i class="fas fa-bookmark"></i> <span class="laborer-menu">Saved Jobs</span><span class="contractor-menu">Hiring History</span></a></li>
+                    <li><a href="#" data-section="notifications"><i class="fas fa-bell"></i> Notifications</a></li>
+                </ul>
+            </nav>
+        </aside>
+        <main class="main-content">
+            <header>
+                <div class="user-info">
+                    <img src="https://via.placeholder.com/40" alt="User Avatar" class="avatar">
+                    <span class="username">John Doe</span>
+                </div>
+                <div class="header-actions">
+                    <button id="notificationBtn"><i class="fas fa-bell"></i></button>
+                    <button id="switchDashboard">Switch to <span class="laborer-menu">Contractor</span><span class="contractor-menu">Laborer</span> Dashboard</button>
+                </div>
+            </header>
+            <div class="content">
+                <!-- Content sections will be dynamically loaded here -->
+            </div>
+        </main>
+    </div>
+    <script>
+        // DOM elements
+        const switchDashboardBtn = document.getElementById('switchDashboard');
+        const navLinks = document.querySelectorAll('.sidebar nav ul li a');
+        const content = document.querySelector('.content');
+
+        // Dashboard state
+        let isLaborerDashboard = true;
+
+        // Content for each section
+        const dashboardContent = {
+            laborer: {
+                profile: `
+                    <h2>Laborer Profile</h2>
+                    <div class="card">
+                        <h3>Personal Information</h3>
+                        <form id="laborerProfileForm">
+                            <label for="name">Name:</label>
+                            <input type="text" id="name" name="name" value="John Doe" required>
+                            <label for="email">Email:</label>
+                            <input type="email" id="email" name="email" value="john.doe@example.com" required>
+                            <label for="phone">Phone:</label>
+                            <input type="tel" id="phone" name="phone" value="(123) 456-7890" required>
+                            <button type="submit" class="btn">Update Profile</button>
+                        </form>
+                    </div>
+                    <div class="card">
+                        <h3>Skills</h3>
+                        <form id="laborerSkillsForm">
+                            <label for="skills">Add Skill:</label>
+                            <input type="text" id="skills" name="skills">
+                            <button type="submit" class="btn">Add Skill</button>
+                        </form>
+                        <ul id="skillsList">
+                            <li>Carpentry</li>
+                            <li>Plumbing</li>
+                            <li>Electrical</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>Certifications</h3>
+                        <form id="laborerCertificationsForm">
+                            <label for="certification">Certification Name:</label>
+                            <input type="text" id="certification" name="certification">
+                            <label for="certDate">Date Completed:</label>
+                            <input type="date" id="certDate" name="certDate">
+                            <button type="submit" class="btn">Add Certification</button>
+                        </form>
+                        <ul id="certificationsList">
+                            <li>OSHA Safety Certification - 2023-01-15</li>
+                            <li>First Aid and CPR - 2022-11-30</li>
+                        </ul>
+                    </div>
+                `,
+                jobs: `
+                    <h2>Job Search</h2>
+                    <div class="card">
+                        <h3>Search Filters</h3>
+                        <form id="jobSearchForm">
+                            <label for="jobSkill">Skill:</label>
+                            <input type="text" id="jobSkill" name="jobSkill">
+                            <label for="jobLocation">Location:</label>
+                            <input type="text" id="jobLocation" name="jobLocation">
+                            <label for="jobAvailability">Availability:</label>
+                            <select id="jobAvailability" name="jobAvailability">
+                                <option value="">Any</option>
+                                <option value="fulltime">Full-time</option>
+                                <option value="parttime">Part-time</option>
+                                <option value="contract">Contract</option>
+                            </select>
+                            <button type="submit" class="btn">Search Jobs</button>
+                        </form>
+                    </div>
+                    <div class="card">
+                        <h3>Available Jobs</h3>
+                        <ul id="jobList">
+                            <li>Construction Worker - New York City (Full-time) <button class="btn">Apply</button></li>
+                            <li>Plumber - Los Angeles (Contract) <button class="btn">Apply</button></li>
+                            <li>Electrician - Chicago (Part-time) <button class="btn">Apply</button></li>
+                        </ul>
+                    </div>
+                `,
+                skills: `
+                    <h2>Training and Skill Enhancement</h2>
+                    <div class="card">
+                        <h3>Available Courses</h3>
+                        <ul id="courseList">
+                            <li>Advanced Carpentry Techniques <button class="btn">Enroll</button></li>
+                            <li>Introduction to HVAC Systems <button class="btn">Enroll</button></li>
+                            <li>Workplace Safety Certification <button class="btn">Enroll</button></li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>Government-Sponsored Programs</h3>
+                        <ul id="programList">
+                            <li>Green Energy Installation Training <button class="btn">Apply</button></li>
+                            <li>Construction Management Fundamentals <button class="btn">Apply</button></li>
+                        </ul>
+                    </div>
+                `,
+                applications: `
+                    <h2>Job Application Tracking</h2>
+                    <div class="card">
+                        <h3>Your Applications</h3>
+                        <table id="applicationTable">
+                            <thead>
+                                <tr>
+                                    <th>Job Title</th>
+                                    <th>Company</th>
+                                    <th>Status</th>
+                                    <th>Applied Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Construction Worker</td>
+                                    <td>ABC Company</td>
+                                    <td>Pending</td>
+                                    <td>2023-05-01</td>
+                                </tr>
+                                <tr>
+                                    <td>Plumber</td>
+                                    <td>XYZ Plumbing</td>
+                                    <td>Interviewed</td>
+                                    <td>2023-04-15</td>
+                                </tr>
+                                <tr>
+                                    <td>Electrician</td>
+                                    <td>City Power Co.</td>
+                                    <td>Rejected</td>
+                                    <td>2023-03-30</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                `,
+                saved: `
+                    <h2>Saved Jobs</h2>
+                    <div class="card">
+                        <h3>Bookmarked Jobs</h3>
+                        <ul id="savedJobList">
+                            <li>Senior Carpenter - Wood Works Inc. <button class="btn">Apply</button> <button class="btn">Remove</button></li>
+                            <li>Maintenance Technician - City Hospital <button class="btn">Apply</button> <button class="btn">Remove</button></li>
+                            <li>Construction Site Manager - Big Builder LLC <button class="btn">Apply</button> <button class="btn">Remove</button></li>
+                        </ul>
+                    </div>
+                `,
+                notifications: `
+                    <h2>Notifications</h2>
+                    <div class="card">
+                        <h3>Recent Notifications</h3>
+                        <div class="notification">New job matching your skills: Experienced Carpenter needed in New York City</div>
+                        <div class="notification">Your application for Plumber position at XYZ Plumbing has been viewed</div>
+                        <div class="notification">Reminder: Complete your Workplace Safety Certification course</div>
+                    </div>
+                `
+            },
+            contractor: {
+                profile: `
+                    <h2>Contractor Profile</h2>
+                    <div class="card">
+                        <h3>Business Information</h3>
+                        <form id="contractorProfileForm">
+                            <label for="companyName">Company Name:</label>
+                            <input type="text" id="companyName" name="companyName" value="Acme Construction Co." required>
+                            <label for="businessEmail">Email:</label>
+                            <input type="email" id="businessEmail" name="businessEmail" value="info@acmeconstruction.com" required>
+                            <label for="businessPhone">Phone:</label>
+                            <input type="tel" id="businessPhone" name="businessPhone" value="(987) 654-3210" required>
+                            <button type="submit" class="btn">Update Profile</button>
+                        </form>
+                    </div>
+                    <div class="card">
+                        <h3>Verification Status</h3>
+                        <p>Status: Verified</p>
+                        <p>Last Updated: 2023-05-01</p>
+                    </div>
+                `,
+                jobs: `
+                    <h2>Job Posting</h2>
+                    <div class="card">
+                        <h3>Create New Job Listing</h3>
+                        <form id="jobPostingForm">
+                            <label for="jobTitle">Job Title:</label>
+                            <input type="text" id="jobTitle" name="jobTitle" required>
+                            <label for="jobDescription">Job Description:</label>
+                            <textarea id="jobDescription" name="jobDescription" rows="4" required></textarea>
+                            <label for="jobSkills">Required Skills (comma-separated):</label>
+                            <input type="text" id="jobSkills" name="jobSkills" required>
+                            <label for="jobPayScale">Pay Scale:</label>
+                            <input type="text" id="jobPayScale" name="jobPayScale" required>
+                            <button type="submit" class="btn">Post Job</button>
+                        </form>
+                    </div>
+                    <div class="card">
+                        <h3>Your Active Job Listings</h3>
+                        <ul id="activeJobList">
+                            <li>Experienced Carpenter Needed - New York City <button class="btn">Edit</button> <button class="btn">Close</button></li>
+                            <li>Plumbing Apprentice - Los Angeles <button class="btn">Edit</button> <button class="btn">Close</button></li>
+                            <li>Senior Electrician - Chicago <button class="btn">Edit</button> <button class="btn">Close</button></li>
+                        </ul>
+                    </div>
+                `,
+                skills: `
+                    <h2>Laborer Search</h2>
+                    <div class="card">
+                        <h3>Search Filters</h3>
+                        <form id="laborerSearchForm">
+                            <label for="laborerSkill">Skill:</label>
+                            <input type="text" id="laborerSkill" name="laborerSkill">
+                            <label for="laborerLocation">Location:</label>
+                            <input type="text" id="laborerLocation" name="laborerLocation">
+                            <label for="laborerAvailability">Availability:</label>
+                            <select id="laborerAvailability" name="laborerAvailability">
+                                <option value="">Any</option>
+                                <option value="fulltime">Full-time</option>
+                                <option value="parttime">Part-time</option>
+                                <option value="contract">Contract</option>
+                            </select>
+                            <button type="submit" class="btn">Search Laborers</button>
+                        </form>
+                    </div>
+                    <div class="card">
+                        <h3>Search Results</h3>
+                        <ul id="laborerSearchResults">
+                            <li>John Smith - Carpenter (New York) <button class="btn">View Profile</button> <button class="btn">Contact</button></li>
+                            <li>Jane Doe - Plumber (Los Angeles) <button class="btn">View Profile</button> <button class="btn">Contact</button></li>
+                            <li>Mike Johnson - Electrician (Chicago) <button class="btn">View Profile</button> <button class="btn">Contact</button></li>
+                        </ul>
+                    </div>
+                `,
+                applications: `
+                    <h2>Application Management</h2>
+                    <div class="card">
+                        <h3>Recent Applications</h3>
+                        <table id="applicationManagementTable">
+                            <thead>
+                                <tr>
+                                    <th>Applicant Name</th>
+                                    <th>Job Title</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>John Smith</td>
+                                    <td>Carpenter</td>
+                                    <td>New</td>
+                                    <td>
+                                        <button class="btn">View</button>
+                                        <button class="btn">Shortlist</button>
+                                        <button class="btn">Reject</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Jane Doe</td>
+                                    <td>Plumber</td>
+                                    <td>Shortlisted</td>
+                                    <td>
+                                        <button class="btn">View</button>
+                                        <button class="btn">Interview</button>
+                                        <button class="btn">Reject</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Mike Johnson</td>
+                                    <td>Electrician</td>
+                                    <td>Interviewed</td>
+                                    <td>
+                                        <button class="btn">View</button>
+                                        <button class="btn">Hire</button>
+                                        <button class="btn">Reject</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                `,
+                saved: `
+                    <h2>Hiring History</h2>
+                    <div class="card">
+                        <h3>Previously Hired Laborers</h3>
+                        <table id="hiringHistoryTable">
+                            <thead>
+                                <tr>
+                                    <th>Laborer Name</th>
+                                    <th>Job Title</th>
+                                    <th>Hire Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>John Smith</td>
+                                    <td>Carpenter</td>
+                                    <td>2023-01-15</td>
+                                    <td>
+                                        <button class="btn">View Profile</button>
+                                        <button class="btn">Rehire</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Jane Doe</td>
+                                    <td>Plumber</td>
+                                    <td>2023-02-28</td>
+                                    <td>
+                                        <button class="btn">View Profile</button>
+                                        <button class="btn">Rehire</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Mike Johnson</td>
+                                    <td>Electrician</td>
+                                    <td>2023-03-10</td>
+                                    <td>
+                                        <button class="btn">View Profile</button>
+                                        <button class="btn">Rehire</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                `,
+                notifications: `
+                    <h2>Notifications</h2>
+                    <div class="card">
+                        <h3>Recent Notifications</h3>
+                        <div class="notification">New application received for Experienced Carpenter position</div>
+                        <div class="notification">Your job posting for Plumbing Apprentice is expiring in 3 days</div>
+                        <div class="notification">5 new laborers matching your recent search criteria have joined the platform</div>
+                    </div>
+                `
+            }
+        };
+
+        // Function to update content
+        function updateContent(section) {
+            const dashboardType = isLaborerDashboard ? 'laborer' : 'contractor';
+            content.innerHTML = dashboardContent[dashboardType][section];
+        }
+
+        // Event listener for navigation links
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                navLinks.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+                updateContent(link.dataset.section);
+            });
+        });
+
+        // Event listener for switching dashboard
+        switchDashboardBtn.addEventListener('click', () => {
+            isLaborerDashboard = !isLaborerDashboard;
+            switchDashboardBtn.innerHTML = `Switch to ${isLaborerDashboard ? 'Contractor' : 'Laborer'} Dashboard`;
+            document.querySelectorAll('.laborer-menu, .contractor-menu').forEach(el => el.style.display = 'none');
+            document.querySelectorAll(isLaborerDashboard ? '.laborer-menu' : '.contractor-menu').forEach(el => el.style.display = 'inline');
+            updateContent('profile');
+        });
+
+        // Initialize dashboard
+        updateContent('profile');
+        document.querySelectorAll('.contractor-menu').forEach(el => el.style.display = 'none');
+
+        // Add event listeners for forms and buttons
+        document.addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Form submitted successfully!');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('btn')) {
+                alert('Action performed: ' + e.target.textContent);
+            }
+        });
+    </script>
+</body>
+</html>

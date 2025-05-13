@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Labor Connect - Notifications and Alerts</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 1rem 0;
+            margin-bottom: 20px;
+        }
+
+        header h1 {
+            text-align: center;
+        }
+
+        .notifications-container {
+            display: flex;
+            gap: 20px;
+        }
+
+        .card {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            flex: 1;
+        }
+
+        .card h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .notification-list {
+            list-style-type: none;
+        }
+
+        .notification-item {
+            background-color: #f8f9fa;
+            border-left: 4px solid #3498db;
+            margin-bottom: 10px;
+            padding: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .notification-item:hover {
+            background-color: #e9ecef;
+        }
+
+        .notification-item.unread {
+            background-color: #e8f4fd;
+            font-weight: bold;
+        }
+
+        .notification-item .time {
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: #3498db;
+            color: #fff;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #2980b9;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            font-size: 1rem;
+        }
+
+        .alert {
+            padding: 10px;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 3px;
+            color: #721c24;
+            margin-bottom: 10px;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+
+        #notification-badge {
+            background-color: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 0.8rem;
+            margin-left: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .notifications-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Labor Connect - Notifications and Alerts</h1>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="notifications-container">
+            <div class="card">
+                <h2>SMS and Email Alerts</h2>
+                <form id="alert-form">
+                    <div class="form-group">
+                        <label for="alert-type">Alert Type:</label>
+                        <select id="alert-type" required>
+                            <option value="">Select an alert type</option>
+                            <option value="sms">SMS</option>
+                            <option value="email">Email</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="alert-recipient">Recipient:</label>
+                        <input type="text" id="alert-recipient" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="alert-message">Message:</label>
+                        <input type="text" id="alert-message" required>
+                    </div>
+                    <button type="submit" class="btn">Send Alert</button>
+                </form>
+                <div id="alert-status"></div>
+            </div>
+
+            <div class="card">
+                <h2>In-App Notifications <span id="notification-badge">0</span></h2>
+                <ul id="notification-list" class="notification-list">
+                    <!-- Notifications will be dynamically added here -->
+                </ul>
+                <button id="clear-notifications" class="btn">Clear All</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const alertForm = document.getElementById('alert-form');
+            const alertStatus = document.getElementById('alert-status');
+            const notificationList = document.getElementById('notification-list');
+            const notificationBadge = document.getElementById('notification-badge');
+            const clearNotificationsBtn = document.getElementById('clear-notifications');
+
+            let notificationCount = 0;
+
+            alertForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const alertType = document.getElementById('alert-type').value;
+                const recipient = document.getElementById('alert-recipient').value;
+                const message = document.getElementById('alert-message').value;
+
+                // Simulating alert sending
+                setTimeout(() => {
+                    alertStatus.innerHTML = `
+                        <div class="alert alert-success">
+                            ${alertType.toUpperCase()} alert sent to ${recipient}: "${message}"
+                        </div>
+                    `;
+                    alertForm.reset();
+                }, 1000);
+
+                alertStatus.innerHTML = `
+                    <div class="alert">
+                        Sending ${alertType.toUpperCase()} alert...
+                    </div>
+                `;
+            });
+
+            function addNotification(message, isUnread = true) {
+                const li = document.createElement('li');
+                li.className = `notification-item ${isUnread ? 'unread' : ''}`;
+                li.innerHTML = `
+                    ${message}
+                    <div class="time">${new Date().toLocaleTimeString()}</div>
+                `;
+                notificationList.prepend(li);
+                updateNotificationCount(1);
+            }
+
+            function updateNotificationCount(change) {
+                notificationCount += change;
+                notificationBadge.textContent = notificationCount;
+                notificationBadge.style.display = notificationCount > 0 ? 'inline' : 'none';
+            }
+
+            clearNotificationsBtn.addEventListener('click', () => {
+                notificationList.innerHTML = '';
+                updateNotificationCount(-notificationCount);
+            });
+
+            // Simulating real-time notifications
+            const notificationMessages = [
+                "New job match: Construction Worker needed in New York",
+                "Your application for Plumber position has been viewed",
+                "Reminder: Complete your safety training course",
+                "New message from employer regarding your application",
+                "Job alert: 5 new positions match your skills"
+            ];
+
+            function simulateNewNotification() {
+                const randomMessage = notificationMessages[Math.floor(Math.random() * notificationMessages.length)];
+                addNotification(randomMessage);
+            }
+
+            // Simulate initial notifications
+            for (let i = 0; i < 3; i++) {
+                simulateNewNotification();
+            }
+
+            // Simulate new notifications every 10-20 seconds
+            setInterval(() => {
+                if (Math.random() < 0.7) { // 70% chance of new notification
+                    simulateNewNotification();
+                }
+            }, Math.random() * 10000 + 10000);
+        });
+    </script>
+</body>
+</html>

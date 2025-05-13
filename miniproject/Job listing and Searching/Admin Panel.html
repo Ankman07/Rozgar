@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Labor Connect - Admin Panel</title>
+    <style>
+        /* CSS styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+        }
+
+        .sidebar h2 {
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+        }
+
+        .sidebar ul li {
+            margin-bottom: 10px;
+        }
+
+        .sidebar ul li a {
+            color: #ecf0f1;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .sidebar ul li a:hover,
+        .sidebar ul li a.active {
+            background-color: #34495e;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+        }
+
+        .header {
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            color: #2c3e50;
+        }
+
+        .card {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .card h2 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table th,
+        table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: #3498db;
+            color: #fff;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #2980b9;
+        }
+
+        .btn-danger {
+            background-color: #e74c3c;
+        }
+
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+
+        .btn-success {
+            background-color: #2ecc71;
+        }
+
+        .btn-success:hover {
+            background-color: #27ae60;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            font-size: 1rem;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+
+            .main-content {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <h2>Admin Panel</h2>
+            <nav>
+                <ul>
+                    <li><a href="#" class="active" data-section="user-management">User Management</a></li>
+                    <li><a href="#" data-section="post-approvals">Post Approvals</a></li>
+                    <li><a href="#" data-section="analytics">Analytics</a></li>
+                    <li><a href="#" data-section="complaints">Complaints</a></li>
+                </ul>
+            </nav>
+        </aside>
+        <main class="main-content">
+            <header class="header">
+                <h1>Labor Connect Administration</h1>
+            </header>
+            <section id="user-management" class="card">
+                <h2>User Management</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>User Type</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>john_doe</td>
+                            <td>john@example.com</td>
+                            <td>Laborer</td>
+                            <td>Active</td>
+                            <td>
+                                <button class="btn btn-danger">Ban</button>
+                                <button class="btn">Edit</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>jane_smith</td>
+                            <td>jane@example.com</td>
+                            <td>Contractor</td>
+                            <td>Pending</td>
+                            <td>
+                                <button class="btn btn-success">Approve</button>
+                                <button class="btn btn-danger">Reject</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+            <section id="post-approvals" class="card" style="display: none;">
+                <h2>Job and Training Post Approvals</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Type</th>
+                            <th>Posted By</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Construction Worker Needed</td>
+                            <td>Job</td>
+                            <td>ABC Construction</td>
+                            <td>2023-05-15</td>
+                            <td>
+                                <button class="btn btn-success">Approve</button>
+                                <button class="btn btn-danger">Reject</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Advanced Welding Course</td>
+                            <td>Training</td>
+                            <td>SkillUp Institute</td>
+                            <td>2023-05-14</td>
+                            <td>
+                                <button class="btn btn-success">Approve</button>
+                                <button class="btn btn-danger">Reject</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+            <section id="analytics" class="card" style="display: none;">
+                <h2>Reporting and Analytics</h2>
+                <div class="chart-container">
+                    <canvas id="usageChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <canvas id="applicationChart"></canvas>
+                </div>
+            </section>
+            <section id="complaints" class="card" style="display: none;">
+                <h2>Complaint Resolution</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Complaint ID</th>
+                            <th>User</th>
+                            <th>Subject</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>C001</td>
+                            <td>john_doe</td>
+                            <td>Payment Issue</td>
+                            <td>2023-05-10</td>
+                            <td>Open</td>
+                            <td>
+                                <button class="btn">View</button>
+                                <button class="btn btn-success">Resolve</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>C002</td>
+                            <td>jane_smith</td>
+                            <td>Account Access</td>
+                            <td>2023-05-12</td>
+                            <td>In Progress</td>
+                            <td>
+                                <button class="btn">View</button>
+                                <button class="btn btn-success">Resolve</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // JavaScript code
+        document.addEventListener('DOMContentLoaded', () => {
+            const navLinks = document.querySelectorAll('.sidebar nav ul li a');
+            const sections = document.querySelectorAll('.main-content section');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetSection = link.getAttribute('data-section');
+
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    link.classList.add('active');
+
+                    sections.forEach(section => {
+                        section.style.display = section.id === targetSection ? 'block' : 'none';
+                    });
+
+                    if (targetSection === 'analytics') {
+                        renderCharts();
+                    }
+                });
+            });
+
+            // Simulated data for charts
+            const usageData = {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                datasets: [{
+                    label: 'Site Visits',
+                    data: [1000, 1500, 2000, 2500, 3000, 3500],
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1
+                }]
+            };
+
+            const applicationData = {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                datasets: [{
+                    label: 'Job Applications',
+                    data: [50, 75, 100, 125, 150, 175],
+                    borderColor: 'rgb(255, 99, 132)',
+                    tension: 0.1
+                }]
+            };
+
+            function renderCharts() {
+                new Chart(document.getElementById('usageChart'), {
+                    type: 'line',
+                    data: usageData,
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Site Usage Over Time'
+                            }
+                        }
+                    }
+                });
+
+                new Chart(document.getElementById('applicationChart'), {
+                    type: 'line',
+                    data: applicationData,
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Job Applications Over Time'
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Simulated actions for buttons
+            document.querySelectorAll('.btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    alert(`Action: ${button.textContent} - This would trigger the corresponding backend action.`);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

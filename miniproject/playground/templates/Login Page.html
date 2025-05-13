@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        :root {
+            --primary-color: #4a90e2;
+            --secondary-color: #f5a623;
+            --background-color: #f0f4f8;
+            --card-background: #ffffff;
+            --text-color: #333333;
+            --border-color: #e0e0e0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom right, #e6f2ff, #d9e6f2);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 400px;
+            width: 100%;
+            background-color: var(--card-background);
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(to right, #4a90e2, #5a6acf);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
+
+        .content {
+            padding: 2rem;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .tab-button {
+            background-color: transparent;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab-button:hover {
+            background-color: rgba(74, 144, 226, 0.1);
+        }
+
+        .tab-button.active {
+            border-bottom: 3px solid var(--primary-color);
+            font-weight: bold;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+        }
+
+        .btn {
+            display: inline-block;
+            text-align: center;
+            width: 100%;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background-color: #3a7bc8;
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: #e09613;
+        }
+
+        .help-links {
+            margin-top: 1.5rem;
+            text-align: center;
+        }
+
+        .help-links a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .help-links a:hover {
+            text-decoration: underline;
+        }
+
+        #otp-section {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Login</h1>
+        </div>
+        <div class="content">
+            <div class="tabs">
+                <button class="tab-button active" data-tab="mobile">Mobile OTP</button>
+                <button class="tab-button" data-tab="password">Username & Password</button>
+            </div>
+            <form id="login-form">
+                <div id="mobile-section">
+                    <div class="form-group">
+                        <label for="mobile">Mobile Number</label>
+                        <input type="tel" id="mobile" name="mobile" required>
+                    </div>
+                    <button type="button" class="btn" id="send-otp">Send OTP</button>
+                </div>
+                <div id="otp-section">
+                    <div class="form-group">
+                        <label for="otp">Enter OTP</label>
+                        <input type="text" id="otp" name="otp" required>
+                    </div>
+                    <button type="submit" class="btn">Login</button>
+                </div>
+                <div id="password-section" style="display: none;">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <a type="button" class="btn" href="{% url 'dashboard'%}">Login</a>
+                </div>
+            </form>
+            <div class="help-links">
+                <a href="#" id="forgot-password">Forgot Password</a> | 
+                <a href="#" id="otp-issues">OTP not received?</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const mobileSection = document.getElementById('mobile-section');
+            const otpSection = document.getElementById('otp-section');
+            const passwordSection = document.getElementById('password-section');
+            const sendOtpButton = document.getElementById('send-otp');
+            const loginForm = document.getElementById('login-form');
+            const forgotPasswordLink = document.getElementById('forgot-password');
+            const otpIssuesLink = document.getElementById('otp-issues');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    const tabName = button.getAttribute('data-tab');
+                    if (tabName === 'mobile') {
+                        mobileSection.style.display = 'block';
+                        otpSection.style.display = 'none';
+                        passwordSection.style.display = 'none';
+                    } else {
+                        mobileSection.style.display = 'none';
+                        otpSection.style.display = 'none';
+                        passwordSection.style.display = 'block';
+                    }
+                });
+            });
+
+            sendOtpButton.addEventListener('click', () => {
+                const mobileNumber = document.getElementById('mobile').value;
+                if (mobileNumber) {
+                    // Simulating OTP sent
+                    alert(`OTP sent to ${mobileNumber}`);
+                    mobileSection.style.display = 'none';
+                    otpSection.style.display = 'block';
+                } else {
+                    alert('Please enter a valid mobile number');
+                }
+            });
+
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const activeTab = document.querySelector('.tab-button.active').getAttribute('data-tab');
+                if (activeTab === 'mobile') {
+                    const otp = document.getElementById('otp').value;
+                    if (otp) {
+                        // Normally, you would verify the OTP here via an API request
+                        // For now, redirect to the dashboard
+                        window.location.href = "{% url 'dashboard' %}";
+                    } else {
+                        alert('Please enter the OTP');
+                    }
+                } else {
+                    const username = document.getElementById('username').value;
+                    const password = document.getElementById('password').value;
+                    if (username && password) {
+                        // Normally, you would verify the credentials here via an API request
+                        // For now, redirect to the dashboard
+                        window.location.href = "{% url 'dashboard' %}";
+                    } else {
+                        alert('Please enter both username and password');
+                    }
+                }
+            });
+
+            forgotPasswordLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                alert('Password recovery process initiated. Please check your email.');
+            });
+
+            otpIssuesLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                alert('Please try again later or contact support.');
+            });
+        });
+    </script>
+</body>
+</html>
